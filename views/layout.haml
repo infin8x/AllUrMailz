@@ -1,0 +1,61 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %title AllUrMailzAreBelongToUs
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "", :name => "author"}/
+    / Le styles
+    %link{:href => "css/bootstrap.css", :rel => "stylesheet"}/
+    %link{:href => "http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css", :rel => "stylesheet"}/
+    %script{:src => "http://code.jquery.com/jquery-1.9.1.js"}
+    %script{:src => "http://code.jquery.com/ui/1.10.2/jquery-ui.js"}
+    %script{:src => "js/bootstrap.min.js"}
+
+    :css
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+        %link{:href => "css/bootstrap-responsive.css", :rel => "stylesheet"}/
+    / HTML5 shim, for IE6-8 support of HTML5 elements
+    /[if lt IE 9]
+      <script src="js/html5shiv.js"></script>
+    / Fav and touch icons
+    %link{:href => "ico/apple-touch-icon-144-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "144x144"}/
+    %link{:href => "ico/apple-touch-icon-114-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "114x114"}/
+    %link{:href => "ico/apple-touch-icon-72-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "72x72"}/
+    %link{:href => "ico/apple-touch-icon-57-precomposed.png", :rel => "apple-touch-icon-precomposed"}/
+    %link{:href => "ico/favicon.png", :rel => "shortcut icon"}/
+  %body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .navbar-inner
+        .container
+          %button.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse", :type => "button"}
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.brand{:href => "#"} AllUrMailzAreBelongToUs
+          .nav-collapse.collapse
+            %ul.nav
+              %li.active
+                %a{:href => "/"} Home
+              %li
+                %a{:href => "/item"} Single email display
+              %li{:class => "pull-right"}
+                %button{:class => "btn btn-primary", :role => "button", :"data-target" => "#signin", :"data-toggle" => "modal", :"data-keyboard"=> "true"}Sign in
+    .container
+      = yield
+    .modal.hide.fade{:id => "signin", :role => "dialog"}
+      %form.form-signin
+        %h3.modal-header Please sign in
+        .modal-body
+          %input.input-block-level{:placeholder => "Email address", :type => "text"}/
+          %input.input-block-level{:placeholder => "Password", :type => "password"}/
+        .modal-footer
+          / %label.checkbox
+          /  %input{:type => "checkbox", :value => "remember-me"}/
+          /  Remember me
+          %button.btn.btn-large{:"data-dismiss" => "modal"} Cancel
+          %button.btn.btn-large.btn-primary{:type => "submit"} Sign in
+
