@@ -35,27 +35,12 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{:href => "#"} AllUrMailzAreBelongToUs
+          %a.brand{:href => "/"} AllUrMailzAreBelongToUs
           .nav-collapse.collapse
             %ul.nav
-              %li.active
-                %a{:href => "/"} Home
               %li
                 %a{:href => "/item"} Single email display
               %li{:class => "pull-right"}
-                %button{:class => "btn btn-primary", :role => "button", :"data-target" => "#signin", :"data-toggle" => "modal", :"data-keyboard"=> "true"}Sign in
+                %button{:class => "btn btn-primary", :role => "button", :"data-keyboard"=> "true", :onclick => "location.href='/request'"}Sign in
     .container
       = yield
-    .modal.hide.fade{:id => "signin", :role => "dialog"}
-      %form.form-signin
-        %h3.modal-header Please sign in
-        .modal-body
-          %input.input-block-level{:placeholder => "Email address", :type => "text"}/
-          %input.input-block-level{:placeholder => "Password", :type => "password"}/
-        .modal-footer
-          / %label.checkbox
-          /  %input{:type => "checkbox", :value => "remember-me"}/
-          /  Remember me
-          %button.btn.btn-large{:"data-dismiss" => "modal"} Cancel
-          %button.btn.btn-large.btn-primary{:type => "submit"} Sign in
-

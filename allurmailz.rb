@@ -2,51 +2,76 @@
 require 'sinatra'
 require 'thin'
 require 'haml'
-require 'oauth'
-require 'oauth/consumer'
+require 'net/https'
 
-enable :sessons
+class AllUrMailz < Sinatra::Base
 
-before do
-    session[:oauth] ||= {}
-    consumer_key = 'K56Fxx6NUQmDdlVm9bSIBQKmKGtuwb'
-    consumer_secret = 'wMO9VRrQG6VUS8hToYC9BkRMWV6fFE'
-    
-    @consumer ||= OAuth::Consumer.new(consumer_key, consumer_secret, {:site => "https://app.smartfile.com", :oauth_signature_method => "PLAINTEXT"})
-
-#    consumer_key = '6qoZk0DOfaLF7q7RT1QoKQ'
-#    consumer_secret = 'BhMUfJX0ipHcuPUBeOUfxh4HOOuXC6QPuSrohynH6I'
-#    
-#    @consumer ||= OAuth::Consumer.new(consumer_key, consumer_secret, {:site => "https://api.twitter.com/", :oauth_signature_method => "PLAINTEXT"})
-
-    if !session[:oauth][:request_token].nil? && !session[:oauth][:request_token_secret].nil?
-        @request_token = OAuth::RequestToken.new(@consumer, session[:oauth][:request_token], session[:oauth][:request_token_secret])
+    before do
+        session[:oauth] ||= {}
+        @consumer_key = 'V58Lo7BySs01zaXBOr1qhZHMMQIXSL'
+        @consumer_secret = 'SMb4Z96sC1U1Rbk8To4WKaAyGqMw8L'
     end
-        
-    if !session[:oauth][:access_token].nil? && !session[:oauth][:access_token_secret].nil?
-        @access_token = OAuth::AccessToken.new(@consumer, session[:oauth][:access_token], session[:oauth][:access_token_secret])
+
+    get '/auth' do
+        http = Net::HTTP.new('app.smartfile.com',443)
+        http.use_ssl = true
+
+        path = '/oauth/access_token/'
+        args = 'oauth_version=1.0&oauth_nonce=' + nonce.to_s + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_consumer_key=' + @consumer_key + '&oauth_token=' + session[:oauth][:request_token] + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + @consumer_secret + '%26' + session[:oauth][:request_token_secret] + '&oauth_verifier=' + params['verifier']
+
+        res = http.post(path,args)
+        split = res.body.split(/=|&/)
+
+        session[:oauth][:access_token] = split[3]
+        session[:oauth][:access_token_secret] = split[1]
+        redirect '/'
     end
-end
 
-get '/auth' do
-    @access_token = @request_token.get_access_token(:oauth_verifier => params[:oauth_verifier])
-    session[:oauth][:access_token] = @access_token.token
-    session[:oauth][:access_token] = @access_token.secret
-    redirect '/'
-end
+    def nonce
+        rand(10 ** 30).to_s.rjust(30,'0')
+    end
 
-get "/request" do
-    @request_token = @consumer.get_request_token(:oauth_callback => "http://#{request.host}/auth")
-    session[:oauth][:request_token] = @request_token.token
-    session[:oauth][:request_token_secret] = @request_token.secret
-    redirect @request_token.authorize_url
-end
+    get "/request" do
+        http = Net::HTTP.new('app.smartfile.com', 443)
+        http.use_ssl = true
+
+        path = '/oauth/request_token/'
+        args = 'oauth_version=1.0&oauth_nonce=' + nonce.to_s + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_consumer_key=' + @consumer_key + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + @consumer_secret + '%2526' + '&oauth_callback=' + CGI::escape('http://arapahoebasin.reshall.rose-hulman.edu/auth')  
+
+        res = http.post(path, args)
+        split = res.body.split(/=|&/)
+
+        session[:oauth][:request_token] = split[3]
+        session[:oauth][:request_token_secret] = split[1]
+
+        redirect 'https://app.smartfile.com/oauth/authorize?oauth_token=' + CGI::escape(split[3])
+    end
 
 
-get '/' do
-	haml :index
-end
+    get '/' do
+        haml :index
+    end
 
-get '/item' do
-	haml :item
+    get '/item' do
+        haml :item
+    end
+
+    get '/whoami' do
+        uri = URI.parse(URI.encode('https://app.smartfile.com/api/2/whoami?format=xml&oauth_consumer_key=' + @consumer_key + '&oauth_token=' + session[:oauth][:access_token] + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + @consumer_secret + '%26' + session[:oauth][:access_token_secret] + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + nonce.to_s + '&oauth_version=1.0'))
+        puts uri.host
+        puts uri.port
+        puts uri.request_uri
+        http = Net::HTTP.new(uri.host, uri.port)
+        req = Net::HTTP::Get.new(uri.request_uri)
+        http.use_ssl = true
+
+        puts uri
+
+        # req['Authorization'] = 'OAuth realm="https://app.smartfile.com/",oauth_consumer_key="' + @consumer_key + '",oauth_token="' + session[:oauth][:access_token] + '",oauth_signature_method="PLAINTEXT",oauth_signature="' + @consumer_secret + '%26' + session[:oauth][:access_token_secret] + '",oauth_timestamp="' + Time.now.to_i.to_s + '",oauth_nonce="' + nonce.to_s + '",oauth_version="1.0"'
+
+        res = http.request(req)
+        puts res
+        puts res.body
+    end
+
 end
