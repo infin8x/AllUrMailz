@@ -6,7 +6,6 @@ require 'net/https'
 require 'json'
 
 class AllUrMailz < Sinatra::Base
-
     before do
         session[:oauth] ||= {}
         session[:userinfo] ||= {}
@@ -63,8 +62,13 @@ class AllUrMailz < Sinatra::Base
         haml :item
     end
 
-    get '/account' do
-        haml :account
+    get '/settings' do
+        haml :settings
+    end
+
+    post '/settings' do
+        puts params
+        redirect '/settings'
     end
 
     get '/whoami' do
