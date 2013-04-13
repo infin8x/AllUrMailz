@@ -7,6 +7,7 @@
     %meta{:content => "", :name => "description"}/
     %meta{:content => "", :name => "author"}/
     %link{:href => "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css", :rel => "stylesheet"}/
+    %link{:href => "css/allurmailz.css",:rel => "stylesheet"}/
     /%link{:href => "http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css", :rel => "stylesheet"}/
     %script{:src => "http://code.jquery.com/jquery-1.9.1.js"}
     /%script{:src => "http://code.jquery.com/ui/1.10.2/jquery-ui.js"}
@@ -16,12 +17,10 @@
         padding-top:60px;
         padding-bottom:40px;
       }
-
-    %link{:href => "ico/apple-touch-icon-144-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "144x144"}/
-    %link{:href => "ico/apple-touch-icon-114-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "114x114"}/
-    %link{:href => "ico/apple-touch-icon-72-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "72x72"}/
-    %link{:href => "ico/apple-touch-icon-57-precomposed.png", :rel => "apple-touch-icon-precomposed"}/
-    %link{:href => "ico/favicon.png", :rel => "shortcut icon"}/
+      @media (max-width: 980px) {
+        body {
+          padding-top: 0;
+        }
 
   %body
     .navbar.navbar-inverse.navbar-fixed-top
@@ -31,12 +30,20 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{:href => "/"} AllUrMailzAreBelongToUs
+          %a.brand{:href => "/"} 
+            %img{:src => "/img/logo.png", :width => "140"}
           .nav-collapse.collapse
             %ul.nav
               %li
                 %a{:href => "/item"} Single email display
+              %li
+                %a{:href => "/whoami"} Whoami
             %div{:class => "pull-right"}
-              %a{:class => "btn btn-primary", :href => "/request"}Sign in
+              - if !session[:userinfo][:signedin]
+                %a{:class => "btn btn-primary", :href => "/request"}Sign in
+              - else
+                %a{:class => 'btn btn-danger', :href => '/signout'}
+                  Sign out
+                  = session[:userinfo][:username]
     .container
       = yield
