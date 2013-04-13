@@ -1,0 +1,2 @@
+UNAME = 'DL4CAPh4POXBXlzIBQTR6r4baQg0mm'
+PASSWD = 'LrrKh6Rd4uDmvKkmD1yLcdxgDKakwc'
