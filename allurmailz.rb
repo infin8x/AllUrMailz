@@ -57,7 +57,7 @@ class AllUrMailz < Sinatra::Base
     end
 
     get '/whoami' do
-        uri = URI.parse(URI.encode('https://app.smartfile.com/api/2/whoami?format=xml&oauth_consumer_key=' + @consumer_key + '&oauth_token=' + session[:oauth][:access_token] + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + @consumer_secret + '%26' + session[:oauth][:access_token_secret] + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + nonce.to_s + '&oauth_version=1.0'))
+        uri = URI.parse(URI.encode('https://app.smartfile.com/api/2/whoami?format=xml'))
         puts uri.host
         puts uri.port
         puts uri.request_uri
@@ -65,9 +65,7 @@ class AllUrMailz < Sinatra::Base
         req = Net::HTTP::Get.new(uri.request_uri)
         http.use_ssl = true
 
-        puts uri
-
-        # req['Authorization'] = 'OAuth realm="https://app.smartfile.com/",oauth_consumer_key="' + @consumer_key + '",oauth_token="' + session[:oauth][:access_token] + '",oauth_signature_method="PLAINTEXT",oauth_signature="' + @consumer_secret + '%26' + session[:oauth][:access_token_secret] + '",oauth_timestamp="' + Time.now.to_i.to_s + '",oauth_nonce="' + nonce.to_s + '",oauth_version="1.0"'
+        req['Authorization'] = 'OAuth realm="https://app.smartfile.com/",oauth_consumer_key="' + @consumer_key + '",oauth_token="' + session[:oauth][:access_token] + '",oauth_signature_method="PLAINTEXT",oauth_signature="' + @consumer_secret + '%26' + session[:oauth][:access_token_secret] + '",oauth_timestamp="' + Time.now.to_i.to_s + '",oauth_nonce="' + nonce.to_s + '",oauth_version="1.0"'
 
         res = http.request(req)
         puts res
