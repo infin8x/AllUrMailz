@@ -3,6 +3,7 @@ require 'json'
 require 'net/http/post/multipart' #http://github.com/nicksieger/multipart-post
 require_relative './auth.rb'
 
+
 class APICaller
 	CONSUMER_KEY = 'V58Lo7BySs01zaXBOr1qhZHMMQIXSL'
     CONSUMER_SECRET = 'SMb4Z96sC1U1Rbk8To4WKaAyGqMw8L'
@@ -54,7 +55,9 @@ class APICaller
 			req.body = post_body.join
 		end
 
-		#print API_SERVER + API_BASE_URL + path + "\n"
+		# For use until we get OAUTH working. Great for testing!
+		# Be sure to keep auth.rb private.
+		req.basic_auth UNAME, PASSWD
 
 		resp, data = http.request(req)
 		if resp.code == "200"

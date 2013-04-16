@@ -25,45 +25,53 @@ class MailRetriever
 	end
 
 	# Method needs work with folders to get functioning properly.
-	def retrieveMailFromFolders(folders=nil)
-		cli = Viewpoint::EWSClient.new(@server, @user, @password)
-	
-		folders = Array.new
-		folders << cli.get_folder_by_name("Class Information")
+	def retrieveMailFromFolders(folderNames)
+		begin
+			cli = Viewpoint::EWSClient.new(@server, @user, @password)
 		
-		serverHost = URI.parse(@server).host
-		FileUtils.mkdir("tmp") if !File.directory?("tmp")
-
-		folders.each do |folder|
-			folderName = URI.encode(folder.name)
-			@API.MakeDirectory(folderName, "allurmailz/#{@user}@#{serverHost}")
-			items = folder.items
-
-			items.each do |item|
-				next if !item.kind_of?(Viewpoint::EWS::Types::Message)
-				
-				message = item.get_all_properties!
-				email = Email.new
-				email.fromName = item.sender.name
-				email.fromEmail = item.sender.email_address
-				email.timeSent = item.date_time_sent
-				email.subject = item.subject
-				email.id = URI.encode(item.id)
-				email.hashId = Digest::SHA1.hexdigest(email.id).to_s
-
-				begin
-					email.body = message[:body][:text]
-					email.to = message[:to_recipients][:elems][0][:mailbox][:elems][0][:name][:text]
-				rescue		
-					puts "Whoops!"
-				end
-
-				fileName = email.hashId + ".json"
-				File.open(fileName, "w") { |file| file.write(email.to_json) }
-				path = "allurmailz/#{@user}@#{serverHost}/#{folderName}"
-				@API.SendToSmartFile(fileName, path, "application/json")
-				File.delete(fileName)
+			folders = Array.new
+			folderNames.each do |folderName|
+				folders << cli.get_folder_by_name(folderName)
 			end
+			
+			serverHost = URI.parse(@server).host
+			FileUtils.mkdir("tmp") if !File.directory?("tmp")
+
+			folders.each do |folder|
+				folderName = URI.encode(folder.name)
+				@API.MakeDirectory(folderName, "allurmailz/#{@user}@#{serverHost}")
+				items = folder.items
+
+				items.each do |item|
+					next if !item.kind_of?(Viewpoint::EWS::Types::Message)
+					
+					message = item.get_all_properties!
+					email = Email.new
+					email.fromName = item.sender.name
+					email.fromEmail = item.sender.email_address
+					email.timeSent = item.date_time_sent
+					email.subject = item.subject
+					email.id = URI.encode(item.id)
+					email.hashId = Digest::SHA1.hexdigest(email.id).to_s
+
+					begin
+						email.body = message[:body][:text]
+						email.to = message[:to_recipients][:elems][0][:mailbox][:elems][0][:name][:text]
+					rescue		
+						puts "Whoops!"
+					end
+
+					fileName = email.hashId + ".json"
+					File.open(fileName, "w") { |file| file.write(email.to_json) }
+					path = "allurmailz/#{@user}@#{serverHost}/#{folderName}"
+					@API.SendToSmartFile(fileName, path, "application/json")
+					File.delete(fileName)
+				end
+			end
+			return true
+		rescue Exception => e
+			puts e
+			return false
 		end
 	end
 

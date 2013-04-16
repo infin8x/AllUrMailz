@@ -60,6 +60,12 @@ class APICommands
 		end 
 		return emailList
 	end
+	
+	# IMPORTANT: Send the hashId from the email!
+	def GetEmail(accountName, folder, emailID)
+		emailJSON = GetFileData(emailID + ".json", "/allurmailz/#{accountName}/#{folder}")
+		return Email.CreateFromJSON(emailJSON)		
+	end
 end
 
 #c = APICommands.new
