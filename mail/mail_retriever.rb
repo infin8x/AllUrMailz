@@ -1,5 +1,6 @@
 require 'viewpoint'
-require './email'
+require 'digest/sha1'
+#require './email'
 
 include Viewpoint::EWS
 
@@ -8,6 +9,8 @@ class MailRetriever
 	attr_accessor :user, :password, :server
 
 	def initialize(user=nil, passwd=nil, server=nil)
+
+		@API = APICommands.new
 		@user = user
 		@password = passwd
 		@server = server
@@ -18,22 +21,24 @@ class MailRetriever
 			throw "Not all connection information is set!"
 		end
 		cli = Viewpoint::EWSClient.new(@server, @user, @password)
-
-		return cli.folders traversal: :deep
+		return cli.folders #traversal: :deep
 	end
 
-	def retrieveAllMail
-		#folders = getFolders
-		
-		folders = Array.new
+	# Method needs work with folders to get functioning properly.
+	def retrieveMailFromFolders(folders=nil)
 		cli = Viewpoint::EWSClient.new(@server, @user, @password)
-		folders << cli.get_folder(:inbox)
-		folders << cli.get_folder_by_name("Bruce")
+	
+		folders = Array.new
+		folders << cli.get_folder_by_name("Class Information")
 		
-		greatMailHash = Hash.new
+		serverHost = URI.parse(@server).host
+		FileUtils.mkdir("tmp") if !File.directory?("tmp")
+
 		folders.each do |folder|
+			folderName = URI.encode(folder.name)
+			@API.MakeDirectory(folderName, "allurmailz/#{@user}@#{serverHost}")
 			items = folder.items
-			mailList = Array.new
+
 			items.each do |item|
 				next if !item.kind_of?(Viewpoint::EWS::Types::Message)
 				
@@ -43,28 +48,26 @@ class MailRetriever
 				email.fromEmail = item.sender.email_address
 				email.timeSent = item.date_time_sent
 				email.subject = item.subject
-				email.id = item.id
+				email.id = URI.encode(item.id)
+				email.hashId = Digest::SHA1.hexdigest(email.id).to_s
+
 				begin
 					email.body = message[:body][:text]
 					email.to = message[:to_recipients][:elems][0][:mailbox][:elems][0][:name][:text]
 				rescue		
 					puts "Whoops!"
 				end
-				mailList << email
+
+				fileName = email.hashId + ".json"
+				File.open(fileName, "w") { |file| file.write(email.to_json) }
+				path = "allurmailz/#{@user}@#{serverHost}/#{folderName}"
+				@API.SendToSmartFile(fileName, path, "application/json")
+				File.delete(fileName)
 			end
-			greatMailHash[folder.name] = mailList
 		end
-		return greatMailHash
 	end
 
-	def saveMailHash(mailHash)
-		FileUtils.mkdir("allurmailz") if !File.directory?("allurmailz")
-		mailHash.each do |folder, messages|
-			dirName = "allurmailz/#{folder}"
-			FileUtils.mkdir(dirName) if !File.directory?(dirName)
-			messages.each do |message|
-				File.open(dirName + "/" + message.id.gsub("/",""), "w") { |file| file.write(message.to_json) }
-			end
-		end
+	def randomString
+		return (0...8).map{(65+rand(26)).chr}.join
 	end
 end
