@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/zenchild/Viewpoint.git
+  revision: 8b208271ce736fd8c03b09199c039edf3c2a49f7
+  specs:
+    viewpoint (1.0.0.beta.1)
+      httpclient
+      logging
+      nokogiri
+      rubyntlm (~> 0.3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -5,10 +15,18 @@ GEM
     eventmachine (1.0.3)
     haml (4.0.0)
       tilt
+    httpclient (2.3.3)
+    little-plugger (1.1.3)
+    logging (1.8.1)
+      little-plugger (>= 1.1.3)
+      multi_json (>= 1.3.6)
+    multi_json (1.7.2)
     multipart-post (1.2.0)
+    nokogiri (1.5.9)
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
+    rubyntlm (0.3.1)
     sinatra (1.4.1)
       rack (~> 1.5, >= 1.5.2)
       rack-protection (~> 1.4)
@@ -27,3 +45,4 @@ DEPENDENCIES
   multipart-post
   sinatra
   thin
+  viewpoint!
