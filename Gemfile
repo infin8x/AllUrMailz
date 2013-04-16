@@ -1,1 +1,6 @@
-
+source 'https://rubygems.org'
+gem 'heroku'
+gem 'sinatra'
+gem 'thin'
+gem 'haml'
+gem 'multipart-post'

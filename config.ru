@@ -1,3 +1,7 @@
+require 'bundler'
+
+Bundler.require
+
 require './allurmailz.rb'
 use Rack::Session::Cookie, :key => 'rack.session',
                            :domain => 'arapahoebasin.reshall.rose-hulman.edu',
