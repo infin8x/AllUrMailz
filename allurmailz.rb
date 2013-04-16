@@ -14,6 +14,11 @@ PASSWORD = 'TmV2ZXJzYXlkaWUw'
 SERVER = 'https://exchange.rose-hulman.edu/ews/exchange.asmx'
 
 class AllUrMailz < Sinatra::Base
+	configure do
+		enable :sessions
+		set :session_secret, ENV['SESSION_SECRET'] ||= 'my super super secret session secret'
+	end
+	
     before do
         session[:oauth] ||= {}
         session[:userinfo] ||= {}
