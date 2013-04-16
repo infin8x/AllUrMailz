@@ -26,6 +26,7 @@ class APICaller
 		end
 
 		#print API_SERVER + API_BASE_URL + path + "\n"
+
 		
 		resp, data = http.request(req)
 		if resp.code == "200"
@@ -33,6 +34,7 @@ class APICaller
 		else
 			puts "#{method} - #{path}"
 			puts resp.body if !resp.body.nil?
+
 			raise 'Network Error ' + resp.code
 		end
 	end
@@ -75,4 +77,3 @@ class APICaller
 	end
 
 end
-

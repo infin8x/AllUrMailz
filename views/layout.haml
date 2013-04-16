@@ -6,27 +6,23 @@
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
     %meta{:content => "", :name => "description"}/
     %meta{:content => "", :name => "author"}/
-    / Le styles
-    %link{:href => "css/bootstrap.css", :rel => "stylesheet"}/
-    %link{:href => "http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css", :rel => "stylesheet"}/
+    %link{:href => "//netdna.bootstrapcdn.com/bootswatch/2.3.1/cyborg/bootstrap.min.css", :rel => "stylesheet"}/
+    %link{:href => "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css", :rel => "stylesheet"}/
+    %link{:href => "css/allurmailz.css",:rel => "stylesheet"}/
+    /%link{:href => "http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css", :rel => "stylesheet"}/
     %script{:src => "http://code.jquery.com/jquery-1.9.1.js"}
-    %script{:src => "http://code.jquery.com/ui/1.10.2/jquery-ui.js"}
-    %script{:src => "js/bootstrap.min.js"}
-
+    /%script{:src => "http://code.jquery.com/ui/1.10.2/jquery-ui.js"}
+    %script{:src => "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"}
     :css
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      body { 
+        padding-top:60px;
+        padding-bottom:40px;
       }
-        %link{:href => "css/bootstrap-responsive.css", :rel => "stylesheet"}/
-    / HTML5 shim, for IE6-8 support of HTML5 elements
-    /[if lt IE 9]
-      <script src="js/html5shiv.js"></script>
-    / Fav and touch icons
-    %link{:href => "ico/apple-touch-icon-144-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "144x144"}/
-    %link{:href => "ico/apple-touch-icon-114-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "114x114"}/
-    %link{:href => "ico/apple-touch-icon-72-precomposed.png", :rel => "apple-touch-icon-precomposed", :sizes => "72x72"}/
-    %link{:href => "ico/apple-touch-icon-57-precomposed.png", :rel => "apple-touch-icon-precomposed"}/
-    %link{:href => "ico/favicon.png", :rel => "shortcut icon"}/
+      @media (max-width: 980px) {
+        body {
+          padding-top: 0;
+        }
+
   %body
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
@@ -35,12 +31,33 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand{:href => "/"} AllUrMailzAreBelongToUs
+          %a.brand{:href => "/"} 
+            %img{:src => "/img/logo.png", :width => "140"}
           .nav-collapse.collapse
             %ul.nav
               %li
                 %a{:href => "/item"} Single email display
-              %li{:class => "pull-right"}
-                %button{:class => "btn btn-primary", :role => "button", :"data-keyboard"=> "true", :onclick => "location.href='/request'"}Sign in
+              %li
+                %a{:href => "/whoami"} Whoami
+            .pull-right
+              - if !session[:userinfo][:signedin]
+                %a.btn.btn-primary{:href => "/request"}Sign in
+              - else
+                .btn-group
+                  %a.btn.btn-primary.dropdown-toggle{:data => {:toggle => "dropdown"}}
+                    %i.icon-user
+                    &nbsp;
+                    = session[:userinfo][:username]
+                    %span.caret
+                  %ul.dropdown-menu
+                    %li
+                      %a{:href => '/settings'}
+                        %i.icon-wrench.icon-white
+                        &nbsp; Settings
+                    %li.divider
+                    %li
+                      %a.danger{:href => '/signout'}
+                        %i.icon-road.icon-white
+                        &nbsp; Sign out
     .container
       = yield

@@ -1,0 +1,22 @@
+%h2.text-center.page-header
+  Settings
+%form.form-horizontal{:action => "/settings", :method => "POST"}
+  %h3 Email source connection information
+  .control-group
+    %label.control-label{:for => "inputServer"}
+      Exchange server
+    .controls
+      %input{:type => "text", :id => "inputServer", :name => "server", :placeholder => "exchange.contoso.com"}
+  .control-group
+    %label.control-label{:for => "inputUsername"}
+      Username
+    .controls
+      %input{:type => "text", :id => "inputUsername", :name => "username", :placeholder => "username"}
+  .control-group
+    %label.control-label{:for => "inputPassword"}
+      Password
+    .controls
+      %input{:type => "password", :id => "inputPassword", :name => "password", :placeholder => "password"}
+  .control-group
+    .controls
+      %input.btn{:type => "submit"} 

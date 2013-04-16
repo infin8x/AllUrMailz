@@ -11,7 +11,6 @@ class Email
 		@body = "Unknown!"
 		@timeSent = "Unknown!"
 		@id = "Unknown!"
-		
 	end
 
 	def to_json
@@ -35,6 +34,6 @@ class Email
 
 	def to_s
 		return "#{@fromName} - #{@subject} - #{@timeSent}"
-	end
 
+	end
 end

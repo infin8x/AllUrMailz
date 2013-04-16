@@ -1,5 +1,4 @@
 require 'json'
-#require './api_caller'
 
 class APICommands
 	def GetFileData(filename, path=nil)

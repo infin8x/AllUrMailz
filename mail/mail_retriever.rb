@@ -1,12 +1,15 @@
 require 'viewpoint'
 require 'digest/sha1'
+#require './email'
 
 include Viewpoint::EWS
+
 
 class MailRetriever
 	attr_accessor :user, :password, :server
 
 	def initialize(user=nil, passwd=nil, server=nil)
+
 		@API = APICommands.new
 		@user = user
 		@password = passwd
@@ -18,16 +21,15 @@ class MailRetriever
 			throw "Not all connection information is set!"
 		end
 		cli = Viewpoint::EWSClient.new(@server, @user, @password)
-
 		return cli.folders #traversal: :deep
 	end
 
 	# Method needs work with folders to get functioning properly.
 	def retrieveMailFromFolders(folders=nil)
+		cli = Viewpoint::EWSClient.new(@server, @user, @password)
+	
 		folders = Array.new
 		folders << cli.get_folder_by_name("Class Information")
-
-		cli = Viewpoint::EWSClient.new(@server, @user, @password)
 		
 		serverHost = URI.parse(@server).host
 		FileUtils.mkdir("tmp") if !File.directory?("tmp")
@@ -36,6 +38,7 @@ class MailRetriever
 			folderName = URI.encode(folder.name)
 			@API.MakeDirectory(folderName, "allurmailz/#{@user}@#{serverHost}")
 			items = folder.items
+
 			items.each do |item|
 				next if !item.kind_of?(Viewpoint::EWS::Types::Message)
 				
