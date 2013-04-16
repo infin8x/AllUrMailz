@@ -4,6 +4,7 @@ require 'thin'
 require 'haml'
 require 'net/https'
 require 'json'
+require './smartfile/api_caller.rb'
 
 class AllUrMailz < Sinatra::Base
     before do
@@ -11,6 +12,8 @@ class AllUrMailz < Sinatra::Base
         session[:userinfo] ||= {}
         @consumer_key = 'V58Lo7BySs01zaXBOr1qhZHMMQIXSL'
         @consumer_secret = 'SMb4Z96sC1U1Rbk8To4WKaAyGqMw8L'
+
+        session[:api_caller] = APICaller.new
     end
 
     get '/auth' do
@@ -69,6 +72,26 @@ class AllUrMailz < Sinatra::Base
     post '/settings' do
         puts params
         redirect '/settings'
+    end
+
+    get '/connectToServer' do
+        
+    end
+
+    get '/selectFolders' do
+
+    end
+
+    post '/selectFolders' do
+
+    end
+
+    get '/:sname/:fname' do
+
+    end
+
+    get '/:sname/:fname/:iid' do
+
     end
 
     get '/whoami' do

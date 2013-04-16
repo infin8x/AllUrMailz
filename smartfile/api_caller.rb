@@ -15,10 +15,6 @@ class APICaller
 		http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 		req = getHTTPRequestForVerb(method, API_BASE_URL + path)
 
-		# For use until we get OAUTH working. Great for testing!
-		# Be sure to keep auth.rb private.
-		req.basic_auth UNAME, PASSWD
-
 		if !parameters.nil?
 			post_body = []
 			post_body << parameters
@@ -56,6 +52,8 @@ class APICaller
 	end
 
 	def getHTTPRequestForVerb(verb, path)
+        path += '?format=json&oauth_consumer_key=' + @consumer_key + '&oauth_token=' + session[:oauth][:access_token] + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + @consumer_secret + '%26' + session[:oauth][:access_token_secret] + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + nonce.to_s + '&oauth_version=1.0' 
+
 		req = Net::HTTP::Get.new(path) if verb.upcase == "GET"
 		req = Net::HTTP::Post.new(path) if verb.upcase == "POST"
 		req = Net::HTTP::Put.new(path) if verb.upcase == "PUT"

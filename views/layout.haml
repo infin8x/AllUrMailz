@@ -37,8 +37,6 @@
             %ul.nav
               %li
                 %a{:href => "/item"} Single email display
-              %li
-                %a{:href => "/whoami"} Whoami
             .pull-right
               - if !session[:userinfo][:signedin]
                 %a.btn.btn-primary{:href => "/request"}Sign in
