@@ -1,0 +1,11 @@
+%h2.text-center.page-header
+  Select folders to archive into SmartFile
+.yui3-skin-night
+  #folderDataTable
+%br
+.control-group
+  .controls
+    %input.btn{:id => "submitBtn", :type => "submit"} 
+:javascript
+  var data = #{locals[:folders]};
+%script{:src => "js/selectFolders.js"}

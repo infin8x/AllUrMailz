@@ -1,0 +1,21 @@
+%h2.text-center.page-header
+  Get email from your Exchange server
+%form.form-horizontal{:action => "/getEmail", :method => "POST"}
+  .control-group
+    %label.control-label{:for => "inputServer"}
+      Exchange autodiscover URL
+    .controls
+      %input{:type => "text", :id => "inputServer", :name => "server", :placeholder => "https://exchange.contoso.com/ews/exchange.asmx"}
+  .control-group
+    %label.control-label{:for => "inputUsername"}
+      Username
+    .controls
+      %input{:type => "text", :id => "inputUsername", :name => "username", :placeholder => "username"}
+  .control-group
+    %label.control-label{:for => "inputPassword"}
+      Password
+    .controls
+      %input{:type => "password", :id => "inputPassword", :name => "password", :placeholder => "password"}
+  .control-group
+    .controls
+      %input.btn{:type => "submit"} 
