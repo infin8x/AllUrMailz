@@ -100,10 +100,7 @@ class APICaller
 
 	def getHTTPRequestForVerb(verb, path, oauth = false)
 		if oauth
-			path += '?format=json&oauth_consumer_key=' + CONSUMER_KEY + '&oauth_token=' + @access_token + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + CONSUMER_SECRET + '%26' + @access_token_secret + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + oAuthNonce.to_s + '&oauth_version=1.0' 
-		else
-			path += '?format=json'
-			req.basic_auth UNAME, PASSWD
+			path += '?format=json&oauth_consumer_key=' + CONSUMER_KEY + '&oauth_token=' + @access_token + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + CONSUMER_SECRET + '%26' + @access_token_secret + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + oAuthNonce.to_s + '&oauth_version=1.0' 			
 		end
 
 		req = Net::HTTP::Get.new(path) if verb.upcase == "GET"
@@ -111,6 +108,8 @@ class APICaller
 		req = Net::HTTP::Put.new(path) if verb.upcase == "PUT"
 		req = Net::HTTP::Delete.new(path) if verb.upcase == "DELETE"
 		raise "Invalid HTTP Verb - \'#{verb}\'" if req.nil?
+		
+		req.basic_auth UNAME, PASSWD if !oauth
 		return req
 	end
 
