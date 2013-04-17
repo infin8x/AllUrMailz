@@ -21,7 +21,14 @@ class MailRetriever
 			throw "Not all connection information is set!"
 		end
 		cli = Viewpoint::EWSClient.new(@server, @user, @password)
-		return cli.folders #traversal: :deep
+		folders = cli.folders traversal: :deep
+		jsonArray = Array.new
+		folders.each do |folder|
+			thisOne = Hash.new
+			thisOne["folder"] = folder.name
+			jsonArray << thisOne
+		end
+		return jsonArray.to_json
 	end
 
 	# Method needs work with folders to get functioning properly.
