@@ -1,35 +1,35 @@
 require 'json'
 
 class APICommands
+	def initialize(caller)
+		@API = caller
+	end
+    
 	def GetFileData(filename, path=nil)
-		api = APICaller.new
 		filePath = "#{path}/#{filename}"
-		result = api.doAPICall('GET', '/path/data' + filePath)
+		result = @API.doAPICall('GET', '/path/data' + filePath, false)
 		return result
 	end
 
 	def SendToSmartFile(filename, path="", fileMIMEType)
-		api = APICaller.new
 		filePath = "#{path}/"
 		puts "Uploading #{filename}"
-		result = api.doMultipartAPICall('/path/data/' + filePath, filename, fileMIMEType)
+		result = @API.doMultipartAPICall('/path/data/' + filePath, filename, fileMIMEType)
 		return result
 	end
 
 	def MakeDirectory(directoryName, path=nil)
-		api = APICaller.new
 		params = Hash.new
 		finalPath = ""
 		finalPath = "/" + path if !path.nil?
 		finalPath += "/" + directoryName
 		params = "path=#{finalPath}"
-		result = api.doAPICall("POST", "/path/oper/mkdir/", params) 
+		result = @API.doAPICall("POST", "/path/oper/mkdir/", true, params) 
 		return result
 	end
 
 	def GetAccountNames()
-		api = APICaller.new
-		result = api.doAPICall("GET", "/path/info/allurmailz/?children=on")
+		result = @API.doAPICall("GET", "/path/info/allurmailz/?children=on", true)
 		folderData = JSON.parse(result)
 		accountList = Array.new
 		folderData["children"].each do |folder|
@@ -39,8 +39,7 @@ class APICommands
 	end
 
 	def GetMailFolders(accountName)
-		api = APICaller.new
-		result = api.doAPICall("GET", "/path/info/allurmailz/#{accountName}/?children=on")
+		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/?children=on", true)
 		folderData = JSON.parse(result)
 		folderList = Array.new
 		folderData["children"].each do |folder|
@@ -50,15 +49,15 @@ class APICommands
 	end
 
 	def GetMessagesFromFolder(accountName, folder)
-		api = APICaller.new
-		result = api.doAPICall("GET", "/path/info/allurmailz/#{accountName}/#{folder}/?children=on")
+		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/#{folder}/?children=on", false)
 		folderData = JSON.parse(result)
 		emailList = Array.new
 		folderData["children"].each do |message|
 			emailData = GetFileData(message["name"], "/allurmailz/#{accountName}/#{folder}")
-			emailList << Email.CreateFromJSON(emailData)
+			email = Email.CreateFromJSON(emailData)
+            emailList << email.to_hash
 		end 
-		return emailList
+		return emailList.to_json
 	end
 	
 	# IMPORTANT: Send the hashId from the email!

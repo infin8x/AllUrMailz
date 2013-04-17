@@ -5,8 +5,8 @@ require_relative './auth.rb'
 
 
 class APICaller
-	CONSUMER_KEY = 'V58Lo7BySs01zaXBOr1qhZHMMQIXSL'
-    CONSUMER_SECRET = 'SMb4Z96sC1U1Rbk8To4WKaAyGqMw8L'
+	CONSUMER_KEY = 'usweLaXXHfAl9gbFQFKGEuaxydaGpX'
+    CONSUMER_SECRET = 'nxgwtuSNd39b9H0GDVIYDKmDxjquSJ'
 
 	API_VERSION = "2"
 	API_SERVER = "app.smartfile.com"
@@ -55,10 +55,6 @@ class APICaller
 			req.body = post_body.join
 		end
 
-		# For use until we get OAUTH working. Great for testing!
-		# Be sure to keep auth.rb private.
-		req.basic_auth UNAME, PASSWD
-
 		resp, data = http.request(req)
 		if resp.code == "200"
 			return resp.body
@@ -100,9 +96,13 @@ class APICaller
 
 	def getHTTPRequestForVerb(verb, path, oauth = false)
 		if oauth
-			path += '?format=json&oauth_consumer_key=' + CONSUMER_KEY + '&oauth_token=' + @access_token + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + CONSUMER_SECRET + '%26' + @access_token_secret + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + oAuthNonce.to_s + '&oauth_version=1.0' 			
+            if (path[-1] == '/')
+                path += '?'
+            end
+			path += '&oauth_consumer_key=' + CONSUMER_KEY + '&oauth_token=' + @access_token + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + CONSUMER_SECRET + '%26' + @access_token_secret + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + oAuthNonce.to_s + '&oauth_version=1.0' 			
 		end
 
+        puts path
 		req = Net::HTTP::Get.new(path) if verb.upcase == "GET"
 		req = Net::HTTP::Post.new(path) if verb.upcase == "POST"
 		req = Net::HTTP::Put.new(path) if verb.upcase == "PUT"

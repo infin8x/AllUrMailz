@@ -74,6 +74,7 @@ class AllUrMailz < Sinatra::Base
 	end
 	
 	post '/getEmail' do
+        puts params
 		session[:exchange][:server] = params['server']
 		session[:exchange][:username] = params['username']
 		session[:exchange][:password] = params['password']
@@ -81,8 +82,8 @@ class AllUrMailz < Sinatra::Base
 	end
 
     get '/selectFolders' do
-		retriever = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server])
-		folders = retriever.getFolders
+		session[:retriever] = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server], session[:caller])
+		folders = session[:retriever].getFolders
 		haml :selectFolders, :locals => {:folders => folders}
     end
 
@@ -90,29 +91,25 @@ class AllUrMailz < Sinatra::Base
         request.body.rewind
         data =  request.body.read
         converted = eval(data)
-		retriever = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server])
-		result = retriever.retrieveMailFromFolders(converted)
-		redirect '/'
+		result = session[:retriever].retrieveMailFromFolders(converted)
     end
 
+    get '/data/:sname/:fname' do
+        headers \
+            "Content-Type" => "application/json"
+        c = APICommands.new(session[:caller])
+		toReturn = c.GetMessagesFromFolder(params[:sname], URI.encode(params[:fname]))
+        puts toReturn
+        toReturn
+        # kennedle@exchange.rose-hulman.edu/Class%20Information
+    end
+    
     get '/read/:sname/:fname' do
-		c = APICommands.new
-		# Debug
-		puts params[:sname]
-		puts params[:fname]
-		emails = c.GetMessagesFromFolder(params[:sname], URI.encode(params[:fname]))
-		# kennedle@exchange.rose-hulman.edu/Class%20Information
-		
-		#Sample Stuff, to show it is working
-		output = ""
-		emails.each do |email|
-			output += "#{email.to_s}\n"
-		end
-		output
+		haml :selectEmails, :locals => {:currentFolder => params[:fname], :dataUrl => root_url + "/data/#{params[:sname]}/#{params[:fname]}", :emailBaseUrl => root_url + "/read/#{params[:sname]}/#{params[:fname]}/"}
     end
 
     get '/read/:sname/:fname/:iid' do
-		c = APICommands.new
+		c = APICommands.new(session[:caller])
 		@email = c.GetEmail(params[:sname], URI.encode(params[:fname]), params[:iid])
 		@email.body
     end

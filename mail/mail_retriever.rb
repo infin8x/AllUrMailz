@@ -6,11 +6,10 @@ include Viewpoint::EWS
 
 
 class MailRetriever
-	attr_accessor :user, :password, :server
+	attr_accessor :user, :password, :server, :caller
 
-	def initialize(user=nil, passwd=nil, server=nil)
-
-		@API = APICommands.new
+	def initialize(user=nil, passwd=nil, server=nil, caller = nil)
+		@API = APICommands.new(caller)
 		@user = user
 		@password = passwd
 		@server = server

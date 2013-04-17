@@ -13,9 +13,8 @@ class Email
 		@id = "Unknown!"
 	end
 
-	def to_json
-		daHash = {:fromName => @fromName, :fromEmail => @fromEmail, :to => @to, :subject => @subject, :body => @body, :timeSent => @timeSent, :id => @id, :hashId => @hashId}
-		return daHash.to_json
+	def to_hash
+		return {:fromName => @fromName, :fromEmail => @fromEmail, :to => @to, :subject => @subject, :timeSent => @timeSent, :hashId => @hashId}
 	end
 
 	def self.CreateFromJSON(messageJSON)

@@ -31,7 +31,10 @@ YUI({skin: 'night'}).use('datatable', 'event', 'io', 'json-stringify','gallery-d
             method: 'POST',
             data: Y.JSON.stringify(toReturn),
             headers: { 'Content-Type': 'application/json' },
-            sync: true
+            sync: true,
+            on: {
+                complete: function () { window.location = '/'; }
+            }
         };
         var request = Y.io(uri, config);
     });
