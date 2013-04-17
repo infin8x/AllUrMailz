@@ -13,6 +13,7 @@
     %script{:src => "http://code.jquery.com/jquery-1.9.1.js"}
     /%script{:src => "http://code.jquery.com/ui/1.10.2/jquery-ui.js"}
     %script{:src => "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"}
+    %script{:src => "http://yui.yahooapis.com/3.9.1/build/yui/yui-min.js"}
     :css
       body { 
         padding-top:60px;
@@ -36,7 +37,7 @@
           .nav-collapse.collapse
             %ul.nav
               %li
-                %a{:href => "/item"} Single email display
+                %a{:href => "/getEmail"} Get email
             .pull-right
               - if !session[:userinfo][:signedin]
                 %a.btn.btn-primary{:href => "/request"}Sign in

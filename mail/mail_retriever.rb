@@ -21,7 +21,7 @@ class MailRetriever
 			throw "Not all connection information is set!"
 		end
 		cli = Viewpoint::EWSClient.new(@server, @user, @password)
-		return cli.folders #traversal: :deep
+		return cli.folders traversal: :deep
 	end
 
 	# Method needs work with folders to get functioning properly.
