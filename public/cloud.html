@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tag Cloud?</title>
+		<script type="text/javascript" src="/js/tagCloud.js"></script>
+		<script type="text/javascript" src="/js/tagcanvas.min.js"></script>
+		<script type="text/javascript">
+			// Reference: http://www.goat1000.com/tagcanvas-options.php
+			// http://palagpat-coding.blogspot.com/2009/06/simple-tag-cloud-generator-in.html
+		
+			tags = {
+				"JavaScript":17,
+				"Conferences":2,
+				".NET":1,
+				"GeoWeb":7,
+				"Site news":3,
+				"snippets":5,
+				"Dojo":16
+			};
+
+			function init_tagCloud(parentId) {
+				var parentDiv = document.getElementById(parentId);
+				if (parentDiv) {
+					var cloud = makeCloud(tags,0,.5,3,' ',true);
+					parentDiv.appendChild(cloud);
+				}
+			}
+		
+			window.onload = function() {
+				try {
+					init_tagCloud('tagList');
+					TagCanvas.weight = true;
+					TagCanvas.Start('myCanvas', 'tagList', {
+						textColour: '#000000',
+						outlineColour: '#ff00ff',
+						reverse: true,
+						depth: 0.8,
+						maxSpeed: 0.05
+					});
+				} catch(e) {
+					document.getElementById('myCanvasContainer').style.display = 'none';
+				}
+			};
+		</script>	
+	</head>
+	
+	<body>
+		<div id="myCanvasContainer">
+			<canvas width="500" height="500" id="myCanvas" style="background-color:blue;">
+			</canvas>
+		</div>
+		<div id="tagList">
+		
+		</div>
+	</body>
+</html>
