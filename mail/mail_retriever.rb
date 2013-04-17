@@ -25,7 +25,7 @@ class MailRetriever
 		jsonArray = Array.new
 		folders.each do |folder|
 			thisOne = Hash.new
-			thisOne["folder"] = folder.name
+			thisOne[:folder] = folder.name
 			jsonArray << thisOne
 		end
 		return jsonArray.to_json

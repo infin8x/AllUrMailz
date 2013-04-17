@@ -22,6 +22,7 @@ class AllUrMailz < Sinatra::Base
     before do
         session[:oauth] ||= {}
         session[:userinfo] ||= {}
+		session[:exchange] ||= {}
 		session[:caller] ||= APICaller.new
     end
 	
@@ -65,24 +66,33 @@ class AllUrMailz < Sinatra::Base
     end
 
     post '/settings' do
-        puts params
         redirect '/settings'
     end
+	
+	get '/getEmail' do
+		haml :getEmail
+	end
+	
+	post '/getEmail' do
+		session[:exchange][:server] = params['server']
+		session[:exchange][:username] = params['username']
+		session[:exchange][:password] = params['password']
+		redirect '/selectFolders'
+	end
 
     get '/selectFolders' do
-		retriever = MailRetriever.new(USERNAME, Base64.decode64(PASSWORD), SERVER)
+		retriever = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server])
 		folders = retriever.getFolders
-		@folderNames = Array.new
-		folders.each do |folder|
-			@folderNames << folder.name
-		end
-		@folderNames.to_s
+		haml :selectFolders, :locals => {:folders => folders}
     end
 
     post '/selectFolders' do
-		retriever = MailRetriever.new(USERNAME, Base64.decode64(PASSWORD), SERVER)
-		result = retriever.retrieveMailFromFolders(params[:folders])
-		"Done"
+        request.body.rewind
+        data =  request.body.read
+        converted = eval(data)
+		retriever = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server])
+		result = retriever.retrieveMailFromFolders(converted)
+		redirect '/'
     end
 
     get '/read/:sname/:fname' do
