@@ -29,7 +29,7 @@ class APICommands
 	end
 
 	def GetAccountNames()
-		result = @API.doAPICall("GET", "/path/info/allurmailz/?children=on", true)
+		result = @API.doAPICall("GET", "/path/info/allurmailz/?children=on", false)
 		folderData = JSON.parse(result)
 		accountList = Array.new
 		folderData["children"].each do |folder|
@@ -39,7 +39,7 @@ class APICommands
 	end
 
 	def GetMailFolders(accountName)
-		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/?children=on", true)
+		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/?children=on", false)
 		folderData = JSON.parse(result)
 		folderList = Array.new
 		folderData["children"].each do |folder|
