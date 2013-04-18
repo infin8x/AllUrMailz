@@ -8,6 +8,7 @@ require './smartfile/api_commands'
 require './smartfile/api_caller'
 require './mail/mail_retriever'
 require './mail/email'
+require './mail/stats'
 
 class AllUrMailz < Sinatra::Application
 	configure do
