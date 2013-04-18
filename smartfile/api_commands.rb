@@ -43,7 +43,9 @@ class APICommands
 		folderData = JSON.parse(result)
 		folderList = Array.new
 		folderData["children"].each do |folder|
-			folderList << folder["name"]
+			if folder["name"] != "mailstats.json" && folder["isdir"]
+				folderList << folder["name"]
+			end
 		end 
 		return folderList
 	end
@@ -52,12 +54,15 @@ class APICommands
 		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/#{folder}/?children=on", true)
 		folderData = JSON.parse(result)
 		emailList = Array.new
-		folderData["children"].each do |message|
-			emailData = GetFileData(message["name"], "/allurmailz/#{accountName}/#{folder}")
-			email = Email.CreateFromJSON(emailData)
-            emailList << email.to_hash
-		end 
-		return emailList.to_json
+		if !folderData["children"].nil?
+			folderData["children"].each do |message|
+				emailData = GetFileData(message["name"], "/allurmailz/#{accountName}/#{folder}")
+				email = Email.CreateFromJSON(emailData)
+		        emailList << email.to_hash if !email.nil?
+				puts "Email had an error!" if email.nil?
+			end 
+			return emailList.to_json
+		end
 	end
 	
 	# IMPORTANT: Send the hashId from the email!

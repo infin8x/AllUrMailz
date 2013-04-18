@@ -6,7 +6,7 @@ var canvas = document.getElementById('myCanvas');
 canvas.height = heightToWorkWith;
 canvas.width = document.width;
 
-tags = {
+/*tags = {
 	"JavaScript":17,
 	"Conferences":2,
 	".NET":1,
@@ -14,7 +14,7 @@ tags = {
 	"Site news":3,
 	"snippets":5,
 	"Dojo":16
-};
+};*/
 
 function init_tagCloud(parentId) {
 	var parentDiv = document.getElementById(parentId);

@@ -22,17 +22,21 @@ class Email
 	end
 
 	def self.CreateFromJSON(messageJSON)
-		messageData = JSON.parse(messageJSON)
-		mail = Email.new
-		mail.fromName = messageData["fromName"]
-		mail.fromEmail = messageData["fromEmail"]
-		mail.to = messageData["to"]
-		mail.subject = messageData["subject"]
-		mail.body = messageData["body"]
-		mail.timeSent = messageData["timeSent"]
-		mail.id = messageData["id"]
-		mail.hashId = messageData["hashId"]
-		return mail
+		begin
+			messageData = JSON.parse(messageJSON)
+			mail = Email.new
+			mail.fromName = messageData["fromName"]
+			mail.fromEmail = messageData["fromEmail"]
+			mail.to = messageData["to"]
+			mail.subject = messageData["subject"]
+			mail.body = messageData["body"]
+			mail.timeSent = messageData["timeSent"]
+			mail.id = messageData["id"]
+			mail.hashId = messageData["hashId"]
+			return mail
+		rescue
+			return
+		end
 	end
 
 	def to_s

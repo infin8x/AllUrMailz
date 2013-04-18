@@ -2,6 +2,8 @@
   YUI().use('node', function (Y) {
     Y.one('#viewTagCloud').addClass('active');
   });
+:javascript
+  tags = #{tags}
 %canvas#myCanvas
 #tagList
 %script{:src => "/js/tagCloud.js"}
