@@ -65,6 +65,16 @@ class APICommands
 		emailJSON = GetFileData(emailID + ".json", "/allurmailz/#{accountName}/#{folder}")
 		return Email.CreateFromJSON(emailJSON)		
 	end
+	
+	def GetWordStatistics(accountName)
+		begin
+			stats = GetFileData("mailstats.json", "/allurmailz/#{accountName}")
+			#return JSON.parse(stats)
+			return stats
+		rescue
+			return
+		end
+	end
 end
 
 #c = APICommands.new

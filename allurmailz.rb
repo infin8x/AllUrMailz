@@ -121,6 +121,13 @@ class AllUrMailz < Sinatra::Base
 			404
 		end
 	end
+	
+	get '/data/:sname/mailstats' do
+		headers \
+            "Content-Type" => "application/json"
+        c = APICommands.new(session[:caller])
+		c.GetWordStatistics(params[:sname])
+    end
 
     get '/data/:sname/:fname' do
         headers \
