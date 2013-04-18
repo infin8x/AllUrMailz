@@ -1,0 +1,16 @@
+:javascript
+  YUI().use('node', function (Y) {
+    Y.one('#viewEmail').addClass('active');
+  });
+.yui3-skin-night
+  .row-fluid#topRow
+    .span4
+      #accountList
+      %br
+      #folderList
+    .span8
+      #emailList
+  .row-fluid#bottomRow
+    .span12#message
+      %iframe#messageFrame{:width => "100%", :height => "100%"}
+%script{:src => "/js/viewEmail.js"}

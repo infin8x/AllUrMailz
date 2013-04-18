@@ -1,7 +1,7 @@
 require 'net/https'
 require 'json'
 require 'net/http/post/multipart' #http://github.com/nicksieger/multipart-post
-require_relative './auth.rb'
+#require_relative './auth.rb'
 
 
 class APICaller
@@ -42,6 +42,10 @@ class APICaller
 		@access_token_secret = split[1]
 		return split[3], split[1]
 	end
+    
+    def oAuthHeader
+        return 'OAuth oauth_consumer_key="' + CONSUMER_KEY + '",oauth_token="' + @access_token +  '",oauth_signature_method="PLAINTEXT",oauth_signature="' + CONSUMER_SECRET + '%26' + @access_token_secret + '",oauth_timestamp="' + Time.now.to_i.to_s + '",oauth_nonce="' + oAuthNonce.to_s + '",oauth_version="1.0"'
+    end
 	
 	def doAPICall(method, path, oauth = false, parameters=nil) 
 		http = Net::HTTP.new(API_SERVER, 443)
@@ -66,7 +70,7 @@ class APICaller
 		end
 	end
 	
-	def doMultipartAPICall(path, fileName, fileMIMEType)
+	def doMultipartAPICall(path, fileName, fileMIMEType, oauth = false)
 		puts "Starting multi-part post" 
 		http = Net::HTTP.new(API_SERVER, 443)
 		http.use_ssl = true
@@ -76,9 +80,8 @@ class APICaller
 		File.open(fileName) do |file|
 			req = Net::HTTP::Post::Multipart.new API_BASE_URL + path, "file" => UploadIO.new(file, fileMIMEType, actualFileName)
 
-			# For use until we get OAUTH working. Great for testing!
-			# Be sure to keep auth.rb private.
-			req.basic_auth UNAME, PASSWD
+            req['Authorization'] = oAuthHeader if oauth
+            req.basic_auth UNAME, PASSWD if !oauth
 			
 			#puts "Calling #{API_BASE_URL + path}"
 			#req.each_header {|key,value| puts "#{key} = #{value}" }
@@ -96,22 +99,14 @@ class APICaller
 	end
 
 	def getHTTPRequestForVerb(verb, path, oauth = false)
-		if oauth
-            if (path[-1] == '/')
-                path += '?'
-            end
-			path += '&oauth_consumer_key=' + CONSUMER_KEY + '&oauth_token=' + @access_token + '&oauth_signature_method=PLAINTEXT&oauth_signature=' + CONSUMER_SECRET + '%26' + @access_token_secret + '&oauth_timestamp=' + Time.now.to_i.to_s + '&oauth_nonce=' + oAuthNonce.to_s + '&oauth_version=1.0' 			
-		end
-
-        puts path
 		req = Net::HTTP::Get.new(path) if verb.upcase == "GET"
 		req = Net::HTTP::Post.new(path) if verb.upcase == "POST"
 		req = Net::HTTP::Put.new(path) if verb.upcase == "PUT"
 		req = Net::HTTP::Delete.new(path) if verb.upcase == "DELETE"
 		raise "Invalid HTTP Verb - \'#{verb}\'" if req.nil?
 		
-		req.basic_auth UNAME, PASSWD if !oauth
+        req['Authorization'] = oAuthHeader if oauth
+        req.basic_auth UNAME, PASSWD if !oauth
 		return req
 	end
-
 end

@@ -1,22 +1,45 @@
-%h2.text-center.page-header
-  Get email from your Exchange server
-.span12.offset1
-  %form.form-horizontal{:action => "/getEmail", :method => "POST"}
-    .control-group
-      %label.control-label{:for => "inputServer", :id => "inputServerLabel"}
-        Full Exchange URL
+:javascript
+  YUI().use('node', function (Y) {
+    Y.one('#getEmail').addClass('active');
+  });
+:css
+  body {
+    overflow: hidden;
+  }
+.row-fluid
+  .span4
+    %form#credsForm{}
+      .control-group
+        %label.control-label{:for => "inputServer", :id => "inputServerLabel"}
+          Full Exchange URL
+        .controls
+          %input{:type => "text", :id => "inputServer", :name => "server", :placeholder => "https://exchange.contoso.com/ews/exchange.asmx", :value => "#{locals[:server]}"}
+      .control-group
+        %label.control-label{:for => "inputUsername"}
+          Username
+        .controls
+          %input{:type => "text", :id => "inputUsername", :name => "username", :placeholder => "username", :value => "#{locals[:username]}"}
+      .control-group
+        %label.control-label{:for => "inputPassword"}
+          Password
+        .controls
+          %input{:type => "password", :id => "inputPassword", :name => "password", :placeholder => "password"}
+      .control-group
+        .controls
+          %input.btn{:id => "loadFoldersBtn", :type => "button", :value => "Load folders"} 
+  .span8.yui3-skin-night
+    #folderDataTable
+    %br
+    .control-group.text-center
       .controls
-        %input{:type => "text", :id => "inputServer", :name => "server", :placeholder => "https://exchange.contoso.com/ews/exchange.asmx", :value => "#{locals[:server]}"}
-    .control-group
-      %label.control-label{:for => "inputUsername"}
-        Username
-      .controls
-        %input{:type => "text", :id => "inputUsername", :name => "username", :placeholder => "username", :value => "#{locals[:username]}"}
-    .control-group
-      %label.control-label{:for => "inputPassword"}
-        Password
-      .controls
-        %input{:type => "password", :id => "inputPassword", :name => "password", :placeholder => "password"}
-    .control-group
-      .controls
-        %input.btn{:type => "submit"} 
+        %input.btn{:id => "submitBtn", :type => "submit", :value => "Archive these folders to SmartFile"} 
+  .modal.hide.fade#theModal
+    .modal-header
+      %h3 Just a moment...
+    .modal-body
+      .progress.progress-striped.active
+        .bar{:style => "width: 100%;"}
+      Your emails are making their way into SmartFile; we'll take you to see them when they're all there.
+:javascript
+  var dataUrl = "#{locals[:dataUrl]}";
+%script{:src => "/js/selectFolders.js"}

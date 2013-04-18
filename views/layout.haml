@@ -25,7 +25,7 @@
         }
 
   %body
-    .navbar.navbar-inverse.navbar-fixed-top
+    .navbar.navbar-inverse.navbar-fixed-top#navbar
       .navbar-inner
         .container
           %button.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse", :type => "button"}
@@ -37,8 +37,12 @@
           .nav-collapse.collapse
             %ul.nav
               - if session[:userinfo][:signedin]
-                %li
-                  %a{:href => "/getEmail"} Get email
+                %li#getEmail
+                  %a{:href => "/getEmail"} Archive emails
+                %li#viewEmail
+                  %a{:href => "/viewEmail"} View archived emails
+                %li#viewTagCloud
+                  %a{:href => "/viewTagCloud"} View email statistics
             .pull-right
               - if !session[:userinfo][:signedin]
                 %a.btn.btn-primary{:href => "/request"}Sign in

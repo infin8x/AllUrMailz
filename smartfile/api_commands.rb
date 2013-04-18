@@ -7,14 +7,14 @@ class APICommands
     
 	def GetFileData(filename, path=nil)
 		filePath = "#{path}/#{filename}"
-		result = @API.doAPICall('GET', '/path/data' + filePath, false)
+		result = @API.doAPICall('GET', '/path/data' + filePath, true)
 		return result
 	end
 
 	def SendToSmartFile(filename, path="", fileMIMEType)
 		filePath = "#{path}/"
 		puts "Uploading #{filename}"
-		result = @API.doMultipartAPICall('/path/data/' + filePath, filename, fileMIMEType)
+		result = @API.doMultipartAPICall('/path/data/' + filePath, filename, fileMIMEType, true)
 		return result
 	end
 
@@ -29,7 +29,7 @@ class APICommands
 	end
 
 	def GetAccountNames()
-		result = @API.doAPICall("GET", "/path/info/allurmailz/?children=on", false)
+		result = @API.doAPICall("GET", "/path/info/allurmailz/?children=on", true)
 		folderData = JSON.parse(result)
 		accountList = Array.new
 		folderData["children"].each do |folder|
@@ -39,7 +39,7 @@ class APICommands
 	end
 
 	def GetMailFolders(accountName)
-		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/?children=on", false)
+		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/?children=on", true)
 		folderData = JSON.parse(result)
 		folderList = Array.new
 		folderData["children"].each do |folder|
@@ -49,7 +49,7 @@ class APICommands
 	end
 
 	def GetMessagesFromFolder(accountName, folder)
-		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/#{folder}/?children=on", false)
+		result = @API.doAPICall("GET", "/path/info/allurmailz/#{accountName}/#{folder}/?children=on", true)
 		folderData = JSON.parse(result)
 		emailList = Array.new
 		folderData["children"].each do |message|
