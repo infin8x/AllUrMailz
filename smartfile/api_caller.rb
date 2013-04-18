@@ -109,6 +109,4 @@ class APICaller
         req.basic_auth UNAME, PASSWD if !oauth
 		return req
 	end
-
-    
 end

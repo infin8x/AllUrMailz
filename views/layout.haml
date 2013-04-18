@@ -37,10 +37,12 @@
           .nav-collapse.collapse
             %ul.nav
               - if session[:userinfo][:signedin]
-                %li
+                %li#getEmail
                   %a{:href => "/getEmail"} Archive emails
-                %li
+                %li#viewEmail
                   %a{:href => "/viewEmail"} View archived emails
+                %li#viewTagCloud
+                  %a{:href => "/viewTagCloud"} View email statistics
             .pull-right
               - if !session[:userinfo][:signedin]
                 %a.btn.btn-primary{:href => "/request"}Sign in

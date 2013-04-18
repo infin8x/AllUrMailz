@@ -1,8 +1,9 @@
 post '/getEmail' do
+    puts params
     session[:exchange][:server] = params['server']
     session[:exchange][:username] = params['username']
     session[:exchange][:password] = params['password']
-    redirect '/selectFolders'
+    puts session[:exchange]
 end
 
 get '/data/selectFolders' do

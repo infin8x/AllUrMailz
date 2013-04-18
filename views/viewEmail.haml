@@ -1,7 +1,7 @@
-:css
-  body {
-    overflow: hidden;
-  }
+:javascript
+  YUI().use('node', function (Y) {
+    Y.one('#viewEmail').addClass('active');
+  });
 .yui3-skin-night
   .row-fluid#topRow
     .span4
@@ -13,4 +13,4 @@
   .row-fluid#bottomRow
     .span12#message
       %iframe#messageFrame{:width => "100%", :height => "100%"}
-%script{:src => "/js/viewArchive.js"}
+%script{:src => "/js/viewEmail.js"}

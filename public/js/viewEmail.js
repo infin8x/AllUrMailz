@@ -1,4 +1,4 @@
-YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event', 'io', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
+YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event', 'json-stringify', function (Y) {
     var heightToWorkWith = document.height - document.getElementById('navbar').clientHeight - 30;
     
     document.getElementById('messageFrame').height = heightToWorkWith / 2;
