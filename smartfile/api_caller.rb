@@ -79,7 +79,8 @@ class APICaller
 			# For use until we get OAUTH working. Great for testing!
 			# Be sure to keep auth.rb private.
 			req.basic_auth UNAME, PASSWD
-			puts "Calling #{API_BASE_URL + path}"
+			
+			#puts "Calling #{API_BASE_URL + path}"
 			#req.each_header {|key,value| puts "#{key} = #{value}" }
 			resp, data = http.request(req)
 			if resp.code == "200"

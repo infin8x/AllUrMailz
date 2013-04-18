@@ -13,6 +13,7 @@ class MailRetriever
 		@user = user
 		@password = passwd
 		@server = server
+		@stats = Stats.new
 	end
 
 	def getFolders
@@ -66,6 +67,8 @@ class MailRetriever
 					rescue		
 						puts "Whoops!"
 					end
+					
+					@stats.parseBlock(email.body)
 
 					fileName = email.hashId + ".json"
 					File.open(fileName, "w") { |file| file.write(email.to_json) }
@@ -74,6 +77,12 @@ class MailRetriever
 					File.delete(fileName)
 				end
 			end
+			
+			File.open("mailstats.json", "w") { |file| file.write(@stats.to_json) }
+			path = "allurmailz/#{@user}@#{serverHost}"
+			@API.SendToSmartFile("mailstats.json", path, "application/json")
+			File.delete("mailstats.json")
+			
 			return true
 		rescue Exception => e
 			puts e

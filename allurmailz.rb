@@ -8,10 +8,7 @@ require './smartfile/api_commands'
 require './smartfile/api_caller'
 require './mail/mail_retriever'
 require './mail/email'
-
-USERNAME = 'kennedle'
-PASSWORD = 'TmV2ZXJzYXlkaWUw'
-SERVER = 'https://exchange.rose-hulman.edu/ews/exchange.asmx'
+require './mail/stats'
 
 class AllUrMailz < Sinatra::Base
 	configure do
