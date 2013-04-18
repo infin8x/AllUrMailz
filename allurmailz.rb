@@ -95,7 +95,35 @@ class AllUrMailz < Sinatra::Base
         data =  request.body.read
         converted = eval(data)
 		result = session[:retriever].retrieveMailFromFolders(converted)
-    end
+    end	
+	
+	get '/data/accounts' do
+		c = APICommands.new(session[:caller])
+		accountNames = c.GetAccountNames
+		accounts = Array.new
+		accountNames.each do |account|
+			thisOne = Hash.new
+			thisOne[:account] = account
+			accounts << thisOne
+		end
+		accounts.to_json
+	end
+	
+	get '/data/:sname' do
+		begin
+			c = APICommands.new(session[:caller])
+			folderNames = c.GetMailFolders(params[:sname])
+			folderArray = Array.new
+			folderNames.each do |folder|
+				thisOne = Hash.new
+				thisOne[:folder] = folder
+				folderArray << thisOne
+			end
+			folderArray.to_json
+		rescue
+			404
+		end
+	end
 
     get '/data/:sname/:fname' do
         headers \
