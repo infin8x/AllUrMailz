@@ -1,4 +1,14 @@
-YUI({skin: 'night'}).use('datatable','datatable-scroll', 'datasource', 'event', 'io-form', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
+var Y = YUI({skin: 'night'});
+var loader = new Y.Loader({
+    filter: 'min',
+    base: '../',
+    root: 'build/',
+    combine: true,
+    require: ['node', 'dd', 'console']
+});
+var out = loader.resolve(true);
+
+Y.use('datatable','datatable-scroll', 'datasource', 'event', 'io-form', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
     var heightToWorkWith = document.height - document.getElementById('navbar').clientHeight - 30;
     
     var table = new Y.DataTable({
@@ -19,7 +29,7 @@ YUI({skin: 'night'}).use('datatable','datatable-scroll', 'datasource', 'event', 
     
     var button = Y.one("#loadFoldersBtn");
     button.on("click", function (e) {
-        var request = Y.io("https://" + window.location.hostname + "/getEmail", {
+        var request = Y.io("/getEmail", {
             method: 'POST',
             form: {id: "credsForm"},
             sync: true
