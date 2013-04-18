@@ -70,7 +70,7 @@ class AllUrMailz < Sinatra::Base
     end
 	
 	get '/getEmail' do
-		haml :getEmail
+		haml :getEmail, :locals => {:server => session[:exchange][:server], :username => session[:exchange][:username]}
 	end
 	
 	post '/getEmail' do
@@ -80,11 +80,14 @@ class AllUrMailz < Sinatra::Base
 		session[:exchange][:password] = params['password']
 		redirect '/selectFolders'
 	end
+    
+    get '/data/selectFolders' do
+		session[:retriever] = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server], session[:caller])
+		session[:retriever].getFolders
+    end
 
     get '/selectFolders' do
-		session[:retriever] = MailRetriever.new(session[:exchange][:username], session[:exchange][:password], session[:exchange][:server], session[:caller])
-		folders = session[:retriever].getFolders
-		haml :selectFolders, :locals => {:folders => folders}
+		haml :selectFolders, :locals => {:dataUrl => root_url + "/data/selectFolders"}
     end
 
     post '/selectFolders' do
@@ -99,7 +102,6 @@ class AllUrMailz < Sinatra::Base
             "Content-Type" => "application/json"
         c = APICommands.new(session[:caller])
 		toReturn = c.GetMessagesFromFolder(params[:sname], URI.encode(params[:fname]))
-        puts toReturn
         toReturn
         # kennedle@exchange.rose-hulman.edu/Class%20Information
     end

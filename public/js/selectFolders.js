@@ -1,5 +1,16 @@
-YUI({skin: 'night'}).use('datatable', 'event', 'io', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
-    // A table from data with keys that work fine as column names
+YUI({skin: 'night'}).use('datatable', 'datasource', 'event', 'io', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
+    var myDataSource = new Y.DataSource.IO({
+        source: dataUrl
+    });
+    
+    myDataSource.plug(Y.Plugin.DataSourceJSONSchema, {
+        schema: {
+            resultFields: ['folder']
+        }
+    }).plug(Y.Plugin.DataSourceCache, {
+        max: 3
+    });
+    
     var table = new Y.DataTable({
         columns: [
         {   key: 'folder', 
@@ -7,10 +18,16 @@ YUI({skin: 'night'}).use('datatable', 'event', 'io', 'json-stringify','gallery-d
             width: '400px',
             primaryKey: true
         }],
-        data: data,
+        data: [{folder:""}],
         checkboxSelectMode: true
     });
-    table.render("#folderDataTable");
+    
+    table.plug(Y.Plugin.DataTableDataSource, {
+        datasource: myDataSource
+    });
+    
+    table.render("#folderDataTable").showMessage('loadingMessage');
+    table.datasource.load();
     table.detach('*:change');
 
     var button = Y.one("#submitBtn");

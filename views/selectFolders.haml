@@ -7,5 +7,5 @@
   .controls
     %input.btn{:id => "submitBtn", :type => "submit"} 
 :javascript
-  var data = #{locals[:folders]};
+  var dataUrl = "#{locals[:dataUrl]}";
 %script{:src => "/js/selectFolders.js"}
