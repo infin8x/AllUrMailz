@@ -10,19 +10,36 @@
 .form-horizontal {
     width: 300px;
 }
-
 .yui3-datatable table {
     width: 100%;
 }
-
+div.yui3-datatable-scroll-liner {
+    padding: 0 !important;
+}
+div.yui3-datatable-y-scroller {
+    border: 1px solid #303030;
+    background-color: #000;
+}
+.yui3-skin-night .yui3-datatable-table {
+    border: 0 !important;
+}
 tr.hl td {
     background-color: #fff !important;
 }
-
 #messageFrame {
     border-style: none;
     background-color: #fff;
 }
 #message {
     padding: 10px 0px;
+}
+#theModal .modal-body {
+    max-height: 700px;
+    height: 700px;
+}
+#theModal {
+	width: 700px; 
+}
+br.hidden-desktop {
+    line-height: 30px;
 }

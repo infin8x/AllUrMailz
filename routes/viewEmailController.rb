@@ -44,3 +44,8 @@ get '/read/:sname/:fname/:iid' do
     @email = c.GetEmail(params[:sname], URI.encode(params[:fname]), params[:iid])
     @email.body
 end
+
+get '/tagCloud/:sname' do
+	c = APICommands.new(session[:caller])
+	c.GetWordStatistics(params[:sname])
+end

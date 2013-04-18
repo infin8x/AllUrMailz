@@ -7,6 +7,7 @@ YUI({skin: 'night'}).use('datatable','datatable-scroll', 'datasource', 'event', 
         columns: [
         {   key: 'folder', 
             label: 'Folder Name',
+            width: '90%',
             primaryKey: true
         }],
         data: [{folder:""}],

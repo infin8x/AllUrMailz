@@ -33,13 +33,13 @@
     .control-group.text-center
       .controls
         %input.btn{:id => "submitBtn", :type => "submit", :value => "Archive these folders to SmartFile"} 
-  .modal.hide.fade#theModal
-    .modal-header
-      %h3 Just a moment...
-    .modal-body
-      .progress.progress-striped.active
-        .bar{:style => "width: 100%;"}
-      Your emails are making their way into SmartFile; we'll take you to see them when they're all there.
+.modal.hide.fade#theModal
+  .modal-header
+    %h3 Just a moment...
+  .modal-body
+    .progress.progress-striped.active
+      .bar{:style => "width: 100%;"}
+    Your emails are making their way into SmartFile; we'll take you to see them when they're all there.
 :javascript
   var dataUrl = "#{locals[:dataUrl]}";
 %script{:src => "/js/selectFolders.js"}

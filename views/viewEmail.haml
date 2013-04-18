@@ -6,11 +6,22 @@
   .row-fluid#topRow
     .span4
       #accountList
-      %br
+      %br.hidden-desktop
+      %a.btn.disabled.pull-center.hidden-phone.hidden-tablet#tagCloudButton{:role => "button"}
+        View tag cloud for this account
       #folderList
     .span8
       #emailList
   .row-fluid#bottomRow
     .span12#message
       %iframe#messageFrame{:width => "100%", :height => "100%"}
+.modal.hide.fade#theModal
+  .modal-header
+    %h3#theModalHeader
+  .modal-body#theModalBody
+    %canvas#myCanvas
+    #tagList
+%script{:src => "/js/tagCloud.js"}
+%script{:src => "/js/tagcanvas.min.js"}
+%script{:src => "/js/viewTagCloud.js"}
 %script{:src => "/js/viewEmail.js"}

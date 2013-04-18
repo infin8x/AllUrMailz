@@ -1,4 +1,4 @@
-YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event', 'json-stringify', function (Y) {
+YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event', 'json-stringify', 'json-parse', function (Y) {
     var heightToWorkWith = document.height - document.getElementById('navbar').clientHeight - 30;
     
     document.getElementById('messageFrame').height = heightToWorkWith / 2;
@@ -13,23 +13,21 @@ YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event',
         
     var accountTable = new Y.DataTable({
         scrollable: "y",
-        height: ((heightToWorkWith / 4) - 10) + "px",
+        height: ((heightToWorkWith / 4) - 15) + "px",
         columns: [
         {   key: 'account', 
             label: 'Email account'
-        }],
-        data: [{}]
+        }]
     });
     
     var folderTable = new Y.DataTable({
         scrollable: "y",
-        height: ((heightToWorkWith / 4) - 10) + "px",
+        height: ((heightToWorkWith / 4) - 15) + "px",
         columns: [
         {   key: 'folder', 
             label: 'Email folder',
             primaryKey: true
-        }],
-        data: [{}]
+        }]
     });
     
     var emailTable = new Y.DataTable({
@@ -45,7 +43,7 @@ YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event',
         {   key: 'timeSent',
             label: 'Time'
         }],
-        data: [{}]
+        sortable: true
     });
     
     accountTable.addAttr("selectedRow", { value: null });
@@ -87,6 +85,8 @@ YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event',
         });
         folderTable.showMessage('loadingMessage');
         folderTable.datasource.load();
+        
+        Y.one("#tagCloudButton").removeClass('disabled');
     });
     
     folderTable.after('selectedRowChange', function (e) {
@@ -118,8 +118,12 @@ YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event',
         emailTable.plug(Y.Plugin.DataTableDataSource, {
             datasource: emailDataSource
         });
+        emailTable.sort('timeSent');
+        emailTable.toggleSort('timeSent');
         emailTable.showMessage('loadingMessage');
+
         emailTable.datasource.load();
+
     });
     
     emailTable.after('selectedRowChange', function (e) {
@@ -135,6 +139,19 @@ YUI({skin: 'night'}).use('datatable', 'datatable-scroll', 'datasource', 'event',
         document.getElementById('messageFrame').src = '/read/' + selectedAccount + '/' + selectedFolder + '/' + rec.get('hashId')
     });    
     
+    var modalButton = Y.one("#tagCloudButton");
+    modalButton.on("click", function (e) {
+        function onComplete(transactionId, responseObject) {
+            $("#theModalHeader").html("Most-used words in " + selectedAccount);
+            drawTagCloud(Y.JSON.parse(responseObject.response));
+            $('#theModal').modal('show');
+        }
+        Y.on('io:complete', onComplete, Y);
+        var request = Y.io("/tagCloud/" + selectedAccount, {
+            method: 'GET'
+        });
+        
+    });
     
     accountTable.plug(Y.Plugin.DataTableDataSource, {
         datasource: accountDataSource
