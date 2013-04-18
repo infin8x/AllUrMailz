@@ -19,7 +19,7 @@ YUI({skin: 'night'}).use('datatable','datatable-scroll', 'datasource', 'event', 
     
     var button = Y.one("#loadFoldersBtn");
     button.on("click", function (e) {
-        var request = Y.io("https://" + window.location.hostname "/getEmail", {
+        var request = Y.io("https://" + window.location.hostname + "/getEmail", {
             method: 'POST',
             form: {id: "credsForm"},
             sync: true
