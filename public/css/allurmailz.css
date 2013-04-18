@@ -10,3 +10,19 @@
 .form-horizontal {
     width: 300px;
 }
+
+.yui3-datatable table {
+    width: 100%;
+}
+
+tr.hl td {
+    background-color: #fff !important;
+}
+
+#messageFrame {
+    border-style: none;
+    background-color: #fff;
+}
+#message {
+    padding: 10px;
+}

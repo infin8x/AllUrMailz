@@ -9,8 +9,6 @@ require './smartfile/api_caller'
 require './mail/mail_retriever'
 require './mail/email'
 
-USERNAME = 'kennedle'
-PASSWORD = 'TmV2ZXJzYXlkaWUw'
 SERVER = 'https://exchange.rose-hulman.edu/ews/exchange.asmx'
 
 class AllUrMailz < Sinatra::Base
@@ -108,6 +106,10 @@ class AllUrMailz < Sinatra::Base
 		end
 		accounts.to_json
 	end
+    
+    get '/viewArchives' do
+        haml :viewArchive
+    end
 	
 	get '/data/:sname' do
 		begin

@@ -1,4 +1,4 @@
-YUI({skin: 'night'}).use('datatable','datasource','json-parse', function (Y) {
+YUI({skin: 'night'}).use('dataemailTable','datasource','json-parse', function (Y) {
     var myDataSource = new Y.DataSource.IO({
         source: dataUrl
     });
@@ -18,31 +18,10 @@ YUI({skin: 'night'}).use('datatable','datasource','json-parse', function (Y) {
         max: 3
     });
     
-    var table = new Y.DataTable({
-        columns: [
-        {   key: 'fromName', 
-            label: 'Sender'
-        },
-        {   key: 'subject', 
-            label: 'Subject'
-        },
-        {   key: 'timeSent',
-            label: 'Time'
-        },
-        {   key: 'hashId',
-            label: 'Body',
-            allowHTML:  true,
-            formatter: function(o) {
-                var value = Y.Escape.html(o.value);
-                return '<a href="' + emailBaseUrl + value + '" target="_blank">Email body' + '</a>';
-            }
-        }]
-    });
-    
-    table.plug(Y.Plugin.DataTableDataSource, {
+    emailTable.plug(Y.Plugin.DataTableDataSource, {
         datasource: myDataSource
     });
     
-    table.render("#emailListDataTable").showMessage('loadingMessage');
-    table.datasource.load();
+    emailTable.render("#emailListDataTable").showMessage('loadingMessage');
+    emailTable.datasource.load();
 });
