@@ -1,7 +1,7 @@
 require 'net/https'
 require 'json'
 require 'net/http/post/multipart' #http://github.com/nicksieger/multipart-post
-require_relative './auth.rb'
+#require_relative './auth.rb'
 
 
 class APICaller
