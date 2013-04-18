@@ -38,7 +38,9 @@
             %ul.nav
               - if session[:userinfo][:signedin]
                 %li
-                  %a{:href => "/getEmail"} Get email
+                  %a{:href => "/getEmail"} Archive emails
+                %li
+                  %a{:href => "/viewEmail"} View archived emails
             .pull-right
               - if !session[:userinfo][:signedin]
                 %a.btn.btn-primary{:href => "/request"}Sign in
