@@ -2,14 +2,6 @@ YUI({skin: 'night'}).use('datatable','datasource','json-parse', function (Y) {
     var myDataSource = new Y.DataSource.IO({
         source: dataUrl
     });
-    var myCallback = {
-        success: function(e){
-            alert(e.response);
-        },
-        failure: function(e){
-            alert("failed: " + e.error.message);
-        }
-    };
     
     myDataSource.plug(Y.Plugin.DataSourceJSONSchema, {
         schema: {

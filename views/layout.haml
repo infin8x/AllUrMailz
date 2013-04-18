@@ -36,8 +36,9 @@
             %img{:src => "/img/logo.png", :width => "140"}
           .nav-collapse.collapse
             %ul.nav
-              %li
-                %a{:href => "/getEmail"} Get email
+              - if session[:userinfo][:signedin]
+                %li
+                  %a{:href => "/getEmail"} Get email
             .pull-right
               - if !session[:userinfo][:signedin]
                 %a.btn.btn-primary{:href => "/request"}Sign in
@@ -49,11 +50,11 @@
                     = session[:userinfo][:username]
                     %span.caret
                   %ul.dropdown-menu
-                    %li
-                      %a{:href => '/settings'}
-                        %i.icon-wrench.icon-white
-                        &nbsp; Settings
-                    %li.divider
+                    -#%li
+                    -#  %a{:href => '/settings'}
+                    -#    %i.icon-wrench.icon-white
+                    -#    &nbsp; Settings
+                    -#%li.divider
                     %li
                       %a.danger{:href => '/signout'}
                         %i.icon-road.icon-white

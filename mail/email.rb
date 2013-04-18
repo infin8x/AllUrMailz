@@ -15,6 +15,9 @@ class Email
 
 	def to_json
 		return {:fromName => @fromName, :fromEmail => @fromEmail, :to => @to, :subject => @subject, :timeSent => @timeSent.to_s, :hashId => @hashId, :body => @body}.to_json
+    
+	def to_hash
+		return {:fromName => @fromName, :fromEmail => @fromEmail, :to => @to, :subject => @subject, :timeSent => @timeSent, :hashId => @hashId}
 	end
 
 	def self.CreateFromJSON(messageJSON)
