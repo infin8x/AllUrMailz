@@ -1,4 +1,14 @@
-YUI({skin: 'night'}).use('datatable','datatable-scroll', 'datasource', 'event', 'io-form', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
+var Y = YUI({skin: 'night'});
+var loader = new Y.Loader({
+    filter: 'min',
+    base: '../',
+    root: 'build/',
+    combine: true,
+    require: ['node', 'dd', 'console']
+});
+var out = loader.resolve(true);
+
+Y.use('datatable','datatable-scroll', 'datasource', 'event', 'io-form', 'json-stringify','gallery-datatable-checkbox-select', function (Y) {
     var heightToWorkWith = document.height - document.getElementById('navbar').clientHeight - 30;
     
     var table = new Y.DataTable({
